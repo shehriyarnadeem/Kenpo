@@ -6,20 +6,14 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
-  TouchableOpacity,
   Text,
 } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
 import VideoCard from '../components/VideoCard';
+import GoForwardCard from '../components/GoForwardCard';
 import { Video } from 'expo-av';
-import Welcome from '../../assets/images/welcome.png';
-import ListCourses from '../../assets/images/listcourses.png';
-import SelfDefence from '../../assets/images/selfdefence.png';
-import KenpKent from '../../assets/images/kenpkent.png';
 import MasterChi from '../../assets/images/masterchi.png';
-import Membership from '../../assets/images/membership.png';
-import Aboutinstructor from '../../assets/images/aboutinstructor.png';
-import WhatsNew from '../../assets/images/whatsnew.png';
+import MembershipCard from '../components/MembershipCard'
+
 function Home() {
   const data = [
     {
@@ -116,37 +110,31 @@ function Home() {
         <View style={styles.welcomeNote}>
           <View
             style={{
-              display: 'flex',
+              display: 'flex'
+              
             }}
           >
             <View>
-              <Image source={Welcome} />
+              <Text style={styles.welcome}>Welcome</Text>
             </View>
             <View>
-              <Image source={KenpKent} style={{ top: 20 }} />
+            <Text style={styles.name}>Kenpo Karate</Text>
             </View>
             <View>
-              <Image source={SelfDefence} style={{ marginTop: 40 }} />
+            <Text style={styles.selfdefence}>Self Defence</Text>
             </View>
           </View>
           <View>
             <Image source={MasterChi} height={0} />
           </View>
         </View>
-        <View style={styles.membership}>
-          <Image source={Membership} />
-        </View>
-        <TouchableOpacity style={{ paddingLeft: 5 }}>
-          <Card containerStyle={styles.about}>
-            <View>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#2d446e' }}>
-                About Instructor
-              </Text>
-            </View>
-          </Card>
-        </TouchableOpacity>
-        <View style={{ ...styles.heading, marginLeft: -18 }}>
-          <Image source={WhatsNew} />
+        
+        <MembershipCard />
+       
+        <GoForwardCard text="About Instructor" />
+       
+        <View style={{ ...styles.heading, marginLeft:-10 }}>
+          <Text style={styles.headingText}>What's New</Text>
         </View>
 
         <FlatList
@@ -177,8 +165,8 @@ function Home() {
           keyExtractor={(item, index) => item.key}
         />
 
-        <View style={styles.heading}>
-          <Image source={ListCourses} />
+        <View style={{ ...styles.heading }}>
+          <Text style={styles.headingText}>List of Courses</Text>
         </View>
 
         <FlatList
@@ -205,31 +193,41 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 260,
+    minHeight: 190,
   },
-  membership: {
-    justifyContent: 'center',
-    width: '92%',
-    alignItems: 'center',
-    display: 'flex',
-  },
-  about: {
-    marginTop: 16,
+  welcome:{
+    fontFamily:"RalewayExtraBold",
+    color:'#7EA6FF',
+    fontSize:29,
+    opacity:1
 
-    width: '85%',
-    borderRadius: 20,
-    minHeight: 69,
-    opacity: 1,
-    shadowOpacity: 1,
-    display: 'flex',
-    justifyContent: 'center',
+
   },
+  name:{
+    fontFamily:"RalewayExtraBold",
+    color:'#FFFFFF',
+    fontSize:29,
+    opacity:1,
+    paddingTop:5
+
+  },
+  selfdefence:{
+    fontFamily:"RalewayMedium",
+    color:'#7EA6FF',
+    fontSize:20,
+    opacity:1,
+    paddingTop:8
+
+  },
+ 
+
   heading: {
-    marginTop: 20,
-    width: '40%',
+    paddingTop:20,
+    width: '45%',
     alignItems: 'center',
 
     display: 'flex',
   },
+  headingText:{fontSize:18, color:'#7EA6FF', fontFamily:'RalewayBold'}
 });
 export default Home;

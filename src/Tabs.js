@@ -6,6 +6,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons, AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import NewsDetail from './screens/NewsDetail';
+import Verification from './screens/Verification';
+import UserDetails from './screens/UserDetails';
+import Login from './screens/Login';
 
 function Profile() {
   return (
@@ -34,6 +37,33 @@ function NewsStack() {
         tabBarVisible={false}
         options={{ headerShown: false }}
       />
+    </Stack.Navigator>
+  );
+}
+
+function LoginStack() {
+  return (
+    <Stack.Navigator options={{ headerShown: false }}>
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        tabBarVisible={false}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Verification"
+        component={Verification}
+        tabBarVisible={false}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UserDetails"
+        component={UserDetails}
+        tabBarVisible={false}
+        options={{ headerShown: false }}
+      />
+
+     
     </Stack.Navigator>
   );
 }
@@ -68,6 +98,15 @@ export function MyTabs() {
         component={Profile}
         options={{
           tabBarLabel: 'User',
+          tabBarIcon: ({ color, size }) => <AntDesign name="user" size={33} color="black" />,
+        }}
+      />
+
+      <Tab.Screen
+        name="Login"
+        component={LoginStack}
+        options={{
+          tabBarLabel: 'Login',
           tabBarIcon: ({ color, size }) => <AntDesign name="user" size={33} color="black" />,
         }}
       />

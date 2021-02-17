@@ -6,7 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 function NewsDetail({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
+       <View style={{height:100, top: 50}}>
       <GobackArrow text="Lorem Ipsum is simply... " route="News" navigation={navigation} />
+      </View>
       <ScrollView>
         <Card>
           <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
@@ -17,10 +19,10 @@ function NewsDetail({ navigation }) {
               Lorem Ipsum is simply dummy text of the printing and typesetting industry.
             </Text>
           </View>
-          <View style={{ fontSize: 10, paddingTop: 10 }}>
-            <Text>30 Nov, 2020</Text>
+          <View >
+            <Text style={styles.date}>30 Nov, 2020</Text>
           </View>
-          <Paragraph style={{ paddingTop: 10 }}>
+          <Paragraph style={styles.details}>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
             has been the industry's standard dummy text ever since the 1500s, when an unknown
             printer took a galley of type and scrambled it to make a Lorem Ipsum is simply dummy
@@ -51,6 +53,8 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#001f65',
   },
-  title: { fontFamily: 'RalewayMedium', color: '#9C27B0', fontSize: 20 },
+  details:{ paddingTop: 10, color:'white', fontFamily:'RalewayBlack', fontSize:16 },
+  date:{ fontSize: 10, paddingTop: 10, color:'#919191', fontSize:14, fontFamily:'RalewayBlack' },
+  title: { fontFamily: 'RalewayMedium', color: '#7EA6FF', fontSize: 20 },
 });
 export default NewsDetail;

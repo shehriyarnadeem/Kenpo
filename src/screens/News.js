@@ -42,12 +42,14 @@ function News({ navigation }) {
       <View
         style={{
           height: 100,
-          width: '60%',
+          width: '80%',
           justifyContent: 'center',
           alignItems: 'center',
+          paddingLeft:10
+        
         }}
       >
-        <Title style={{ color: 'white', fontSize: 20 }}>What news and trending</Title>
+        <Title style={styles.heading}>What New and trending</Title>
       </View>
       <FlatList
         contentContainerStyle={{ marginTop: 20 }}
@@ -95,5 +97,6 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#001f65',
   },
+  heading:{ color: 'white', fontSize: 25, fontFamily:'RalewayMedium', textAlign:'left' }
 });
 export default News;

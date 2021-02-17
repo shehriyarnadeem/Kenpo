@@ -7,6 +7,9 @@ import { useFonts } from '@use-expo/font';
 export default function App() {
   let [fontsLoaded] = useFonts({
     RalewayMedium: require('./assets/fonts/static/Raleway-Medium.ttf'),
+    RalewayBlack: require('./assets/fonts/static/Raleway-Regular.ttf'),
+    RalewayExtraBold: require('./assets/fonts/static/Raleway-ExtraBold.ttf'),
+    RalewayBold: require('./assets/fonts/static/Raleway-Bold.ttf'),
   });
 
   if (!fontsLoaded) {
