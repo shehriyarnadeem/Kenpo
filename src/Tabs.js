@@ -8,6 +8,7 @@ import { Ionicons, AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import NewsDetail from './screens/NewsDetail';
 import Verification from './screens/Verification';
 import UserDetails from './screens/UserDetails';
+import Subscription from './screens/Subscription';
 import Login from './screens/Login';
 
 function Profile() {
@@ -62,8 +63,12 @@ function LoginStack() {
         tabBarVisible={false}
         options={{ headerShown: false }}
       />
-
-     
+      <Stack.Screen
+        name="Subscription"
+        component={Subscription}
+        tabBarVisible={false}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

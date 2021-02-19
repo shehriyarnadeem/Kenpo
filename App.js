@@ -10,6 +10,7 @@ export default function App() {
     RalewayBlack: require('./assets/fonts/static/Raleway-Regular.ttf'),
     RalewayExtraBold: require('./assets/fonts/static/Raleway-ExtraBold.ttf'),
     RalewayBold: require('./assets/fonts/static/Raleway-Bold.ttf'),
+    RobotoRegular: require('./assets/fonts/Roboto-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
