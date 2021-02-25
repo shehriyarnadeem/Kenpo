@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import GobackArrow from '../components/GobackArrow'
 import GoForwardCard from '../components/GoForwardCard'
+import CheckBox from 'react-native-check-box'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { TextInput, Button } from 'react-native'
+import { UserContext } from '../context'
+
 const UserDetails = ({ navigation }) => {
+    const context = useContext(UserContext)
+    const { user, setUser } = context
     const [female, setFemale] = useState(null)
     const [male, setMale] = useState(null)
     const toggleFemale = () => {
@@ -16,6 +25,9 @@ const UserDetails = ({ navigation }) => {
         setFemale(false)
         setMale(true)
     }
+
+    navigation.setOptions({ headerShown: false })
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -89,11 +101,27 @@ const UserDetails = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.continue}>
-                <GoForwardCard
+                <View style={styles.checkboxContainer}>
+                    {/* <CheckBox
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            paddingLeft: 20,
+                            bottom: 10,
+                            color: 'white',
+                        }}
+                        color="#fffff"
+                        rightTextStyle={{ color: 'white', fontSize: 18 }}
+                        rightText={'By continuing, you agree to'}
+                    /> */}
+                </View>
+                {/* <GoForwardCard
                     text="Continue"
                     navigation={navigation}
                     redirect="Home"
-                />
+                /> */}
+
+                <Button title="Sign Up" onPress={() => setUser('sherry')} />
             </View>
         </SafeAreaView>
     )
@@ -111,8 +139,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     continue: {
-        bottom: 20,
-
+        bottom: 40,
         justifyContent: 'flex-end',
     },
     heading: {
@@ -159,7 +186,18 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 20,
     },
+    checkboxContainer: {
+        flexDirection: 'row',
 
+        alignItems: 'center',
+        width: '100%',
+    },
+    checkbox: {
+        alignSelf: 'center',
+    },
+    label: {
+        fontSize: 20,
+    },
     borderStyleBase: {
         width: 30,
         height: 45,
@@ -180,8 +218,8 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'flex-start',
+        height: hp('10%'),
         left: 20,
-        top: 50,
     },
 
     underlineStyleHighLighted: {

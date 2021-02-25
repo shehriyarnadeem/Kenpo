@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import GobackArrow from '../components/GobackArrow'
 import GoForwardCard from '../components/GoForwardCard'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
 const Verification = ({ navigation }) => {
+    navigation.setOptions({ headerShown: false })
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <GobackArrow navigation={navigation} route="Login" />
-            </View>
             <View style={styles.content}>
                 <View style={styles.heading}>
                     <Text style={styles.verification}>Verification</Text>
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         borderColor: 'white',
     },
     continue: {
-        bottom: 20,
+        bottom: 30,
 
         justifyContent: 'flex-end',
     },

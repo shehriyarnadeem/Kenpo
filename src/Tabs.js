@@ -7,182 +7,88 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Ionicons, AntDesign, FontAwesome5 } from '@expo/vector-icons'
 import NewsDetail from './screens/NewsDetail'
 import Account from './screens/Account'
-import About from './screens/AboutInstructor'
+import AboutInstructor from './screens/AboutInstructor'
 import VideoPlay from './screens/VideoPlay'
 import VideoList from './screens/VideoList'
 import Verification from './screens/Verification'
 import UserDetails from './screens/UserDetails'
 import Subscription from './screens/Subscription'
 import Login from './screens/Login'
+import { UserContext } from '../src/context'
+const AuthStack = createStackNavigator()
+const AuthStackScreen = () => (
+    <AuthStack.Navigator>
+        <AuthStack.Screen name="Login" component={Login} />
+        <AuthStack.Screen name="Verification" component={Verification} />
+        <AuthStack.Screen name="UserDetails" component={UserDetails} />
+    </AuthStack.Navigator>
+)
 
-function Profile() {
+const Tabs = createBottomTabNavigator()
+const HomeStack = createStackNavigator()
+
+const HomeStackScreen = () => {
     return (
-        <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-            <Text>Profile!</Text>
-        </View>
-    )
-}
+        <HomeStack.Navigator>
+            <HomeStack.Screen name="Home" component={Home} />
 
-const Tab = createBottomTabNavigator()
-const Stack = createStackNavigator()
-
-function NewsStack() {
-    return (
-        <Stack.Navigator options={{ headerShown: false }}>
-            <Stack.Screen
-                name="News"
-                component={News}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-
-            <Stack.Screen
-                name="NewsDetail"
-                component={NewsDetail}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-        </Stack.Navigator>
-    )
-}
-
-function LoginStack() {
-    return (
-        <Stack.Navigator options={{ headerShown: false }}>
-            <Stack.Screen
-                name="Login"
-                component={Login}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Verification"
-                component={Verification}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="UserDetails"
-                component={UserDetails}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-        </Stack.Navigator>
-    )
-}
-
-function AccountStack() {
-    return (
-        <Stack.Navigator options={{ headerShown: false }}>
-            <Stack.Screen
-                name="Account"
-                component={Account}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-        </Stack.Navigator>
-    )
-}
-
-function HomeStack() {
-    return (
-        <Stack.Navigator options={{ headerShown: false }}>
-            <Stack.Screen
-                name="Home"
-                component={Home}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Subscription"
-                component={Subscription}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="UserDetails"
-                component={UserDetails}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
+            <HomeStack.Screen
                 name="About"
-                component={About}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
+                component={AboutInstructor}
+                options={({ route }) => ({
+                    title: route.params.name,
+                })}
             />
-            <Stack.Screen
-                name="VideoPlay"
-                component={VideoPlay}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
+
+            <HomeStack.Screen
                 name="VideoList"
                 component={VideoList}
-                tabBarVisible={false}
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    title: route.params.name,
+                })}
             />
-        </Stack.Navigator>
+            <HomeStack.Screen name="Subscription" component={Subscription} />
+        </HomeStack.Navigator>
     )
 }
 
-export function MyTabs() {
+function TabsScreen() {
     return (
-        <Tab.Navigator
-            initialRouteName="Login"
-            tabBarOptions={{
-                activeTintColor: 'blue',
-            }}
-        >
-            <Tab.Screen
-                name="Home"
-                component={HomeStack}
-                options={{
-                    tabBarLabel: 'Home',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="md-home" size={32} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="News"
-                component={NewsStack}
-                options={{
-                    tabBarLabel: 'News',
-                    tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5
-                            name="newspaper"
-                            size={24}
-                            color="black"
-                        />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Account"
-                component={AccountStack}
-                options={{
-                    tabBarLabel: 'User',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="user" size={33} color="black" />
-                    ),
-                }}
-            />
-
-            <Tab.Screen
-                name="Login"
-                component={LoginStack}
-                options={{
-                    tabBarLabel: 'Login',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="user" size={33} color="black" />
-                    ),
-                }}
-            />
-        </Tab.Navigator>
+        <Tabs.Navigator>
+            <Tabs.Screen name="Home" component={HomeStackScreen} />
+            <Tabs.Screen name="News" component={News} />
+        </Tabs.Navigator>
     )
 }
-export default MyTabs
+
+const RootStack = createStackNavigator()
+
+export function RootStackScreen() {
+    const context = React.useContext(UserContext)
+    const { user } = context
+    if (!user) {
+        return (
+            <RootStack.Navigator headerMode="none">
+                <RootStack.Screen
+                    name="Auth"
+                    component={AuthStackScreen}
+                    options={{
+                        animationEnabled: false,
+                    }}
+                />
+            </RootStack.Navigator>
+        )
+    }
+    return (
+        <RootStack.Navigator headerMode="none">
+            <RootStack.Screen
+                name="Home"
+                component={TabsScreen}
+                options={{
+                    animationEnabled: false,
+                }}
+            />
+        </RootStack.Navigator>
+    )
+}
+export default RootStackScreen

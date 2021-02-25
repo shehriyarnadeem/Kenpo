@@ -8,7 +8,7 @@ const Login = ({ navigation }) => {
     const [formattedValue, setFormattedValue] = useState('')
     const [valid, setValid] = useState(false)
     const [showMessage, setShowMessage] = useState(false)
-
+    navigation.setOptions({ headerShown: false })
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
