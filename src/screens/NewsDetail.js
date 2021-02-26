@@ -3,11 +3,18 @@ import GobackArrow from '../components/GobackArrow';
 import { View, Text, Image, StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 function NewsDetail({ navigation }) {
+  navigation.setOptions({ headerShown: false });
   return (
     <SafeAreaView style={styles.container}>
-       <View style={{height:100, top: 50}}>
-      <GobackArrow text="Lorem Ipsum is simply... " route="News" navigation={navigation} />
+      <View style={styles.header}>
+        <View style={{ paddingTop: 70 }}>
+          <GobackArrow route="News" text="Lorem Ipsum is simply... " navigation={navigation} />
+        </View>
       </View>
       <ScrollView>
         <Card>
@@ -19,7 +26,7 @@ function NewsDetail({ navigation }) {
               Lorem Ipsum is simply dummy text of the printing and typesetting industry.
             </Text>
           </View>
-          <View >
+          <View>
             <Text style={styles.date}>30 Nov, 2020</Text>
           </View>
           <Paragraph style={styles.details}>
@@ -53,8 +60,20 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#001f65',
   },
-  details:{ paddingTop: 10, color:'white', fontFamily:'RalewayBlack', fontSize:16 },
-  date:{ fontSize: 10, paddingTop: 10, color:'#919191', fontSize:14, fontFamily:'RalewayBlack' },
+  header: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+
+    height: hp('20%'),
+  },
+  details: { paddingTop: 10, color: 'white', fontFamily: 'RalewayBlack', fontSize: 16 },
+  date: {
+    fontSize: 10,
+    paddingTop: 10,
+    color: '#919191',
+    fontSize: 14,
+    fontFamily: 'RalewayBlack',
+  },
   title: { fontFamily: 'RalewayMedium', color: '#7EA6FF', fontSize: 20 },
 });
 export default NewsDetail;
