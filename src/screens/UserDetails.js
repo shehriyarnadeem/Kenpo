@@ -61,16 +61,8 @@ const UserDetails = ({ navigation }) => {
     setMale(true);
   };
 
-  navigation.setOptions({ headerShown: false });
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 70 }}>
-          <GobackArrow route="Verification" navigation={navigation} />
-        </View>
-      </View>
-
       <View style={styles.content}>
         <View style={styles.heading}>
           <Text
@@ -119,26 +111,26 @@ const UserDetails = ({ navigation }) => {
       </View>
 
       <View style={styles.continue}>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              paddingLeft: 20,
-              bottom: 50,
-              color: 'white',
-            }}
-            color="#fffff"
-            onClick={() => console.log('checked')}
-            isChecked={true}
-            checkBoxColor="white"
-            checkboxContainer="white"
-            checkedCheckBoxColor="white"
-            rightTextStyle={{ color: 'white', fontSize: 14 }}
-            rightText={`By continuing, you agree to T&C`}
-          />
-        </View>
         <View style={{ bottom: 20 }}>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                paddingLeft: 20,
+
+                color: 'white',
+              }}
+              color="#fffff"
+              onClick={() => console.log('checked')}
+              isChecked={true}
+              checkBoxColor="white"
+              checkboxContainer="white"
+              checkedCheckBoxColor="white"
+              rightTextStyle={{ color: 'white', fontSize: 14 }}
+              rightText={`By continuing, you agree to T&C`}
+            />
+          </View>
           <TouchableOpacity onPress={() => setUser('12')}>
             <Card containerStyle={styles.about} borderRadius={10}>
               <View
@@ -180,7 +172,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   continue: {
-    height: hp('10%'),
+    height: hp('20%'),
     justifyContent: 'flex-end',
   },
   heading: {
@@ -274,9 +266,8 @@ const styles = StyleSheet.create({
   },
   header: {
     justifyContent: 'center',
-    alignItems: 'flex-start',
 
-    height: hp('15%'),
+    height: hp('20%'),
   },
 
   underlineStyleHighLighted: {

@@ -2,6 +2,7 @@ import React from 'react';
 import Lock from '../../assets/images/lock.png';
 import { Card } from 'react-native-elements';
 import { StyleSheet, View, Text, Image } from 'react-native';
+
 const VideoCard = ({ ...props }) => {
   const { locked } = props;
 

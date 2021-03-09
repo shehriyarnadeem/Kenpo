@@ -153,6 +153,7 @@ function Home({ navigation }) {
               style={{
                 color: '#ffffff',
                 fontSize: 14,
+                textDecorationLine: 'underline',
               }}
             >
               View All

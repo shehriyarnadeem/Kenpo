@@ -6,7 +6,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import PathIcon from '../../assets/images/path.png';
+import MarsIcon from '../../assets/images/mars.png';
 import PaymentName from '../../assets/images/paymentname.png';
 import Bag2 from '../../assets/images/bag2.png';
 import Logout from '../../assets/images/Logout.png';
@@ -27,7 +27,7 @@ const Account = ({ navigation }) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            padding: 5,
+
             alignItems: 'center',
           }}
         >
@@ -50,11 +50,10 @@ const Account = ({ navigation }) => {
           </Text>
         </View>
 
-        <View style={{ display: 'flex', flexDirection: 'column' }}>
+        <View style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '35%',
             }}
           >
             <Image source={UserIcon} />
@@ -63,6 +62,8 @@ const Account = ({ navigation }) => {
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                position: 'relative',
+                paddingLeft: 10,
               }}
             >
               John Doe
@@ -71,7 +72,6 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '40%',
             }}
           >
             <Image source={BagIcon} />
@@ -80,6 +80,7 @@ const Account = ({ navigation }) => {
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                paddingLeft: 10,
               }}
             >
               20-02-2000
@@ -88,15 +89,15 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '25%',
             }}
           >
-            <Image source={PathIcon} />
+            <Image source={MarsIcon} />
             <Text
               style={{
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                paddingLeft: 10,
               }}
             >
               Male
@@ -115,7 +116,7 @@ const Account = ({ navigation }) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            padding: 5,
+
             alignItems: 'center',
           }}
         >
@@ -169,7 +170,6 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '55%',
             }}
           >
             <Text
@@ -205,7 +205,8 @@ const Account = ({ navigation }) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            padding: 5,
+
+            textAlign: 'right',
             alignItems: 'center',
             top: 15,
           }}
@@ -239,7 +240,6 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '35%',
             }}
           >
             <Image source={PaymentName} />
@@ -248,6 +248,7 @@ const Account = ({ navigation }) => {
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                paddingLeft: 10,
               }}
             >
               John Doe
@@ -256,7 +257,6 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '60%',
             }}
           >
             <Image source={UserIcon} />
@@ -265,6 +265,7 @@ const Account = ({ navigation }) => {
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                paddingLeft: 14,
               }}
             >
               XXXX XXX XXXX 4651
@@ -273,7 +274,6 @@ const Account = ({ navigation }) => {
           <View
             style={{
               ...styles.RowPersonalDetails,
-              width: '30%',
             }}
           >
             <Image source={Bag2} />
@@ -282,6 +282,7 @@ const Account = ({ navigation }) => {
                 fontFamily: 'RalewayMedium',
                 color: '#000000',
                 fontSize: 16,
+                paddingLeft: 13,
               }}
             >
               02-2024
@@ -387,22 +388,23 @@ const Account = ({ navigation }) => {
             color: 'white',
             fontSize: 20,
             paddingLeft: 40,
-            fontFamily: 'RalewayMedium',
+            fontFamily: 'RalewayBold',
           }}
         >
           My Account
         </Text>
-        <Image source={Logout} />
+        <Image source={Logout} style={{ resizeMode: 'contain', height: 30 }} />
       </View>
       <View
         style={{
           alignItems: 'center',
           flex: 1,
+          bottom: 30,
         }}
       >
         <Card
           style={{
-            width: '90%',
+            width: wp('95%'),
             borderRadius: 20,
             justifyContent: 'center',
             alignSelf: 'center',
@@ -414,7 +416,7 @@ const Account = ({ navigation }) => {
         </Card>
         <Card
           style={{
-            width: '90%',
+            width: wp('95%'),
             borderRadius: 20,
             justifyContent: 'center',
             alignSelf: 'center',
@@ -439,7 +441,9 @@ const styles = StyleSheet.create({
   RowPersonalDetails: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
+    textAlign: 'left',
+
     paddingTop: 18,
 
     alignItems: 'center',

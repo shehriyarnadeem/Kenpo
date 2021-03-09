@@ -8,15 +8,9 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 function NewsDetail({ navigation }) {
-  navigation.setOptions({ headerShown: false });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 70 }}>
-          <GobackArrow route="News" text="Lorem Ipsum is simply... " navigation={navigation} />
-        </View>
-      </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.content}>
         <Card>
           <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
         </Card>
@@ -60,6 +54,9 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#001f65',
   },
+  content: {
+    marginTop: 10,
+  },
   header: {
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -74,6 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'RalewayBlack',
   },
-  title: { fontFamily: 'RalewayMedium', color: '#7EA6FF', fontSize: 20 },
+
+  title: { fontFamily: 'RalewayMedium', color: 'white', fontSize: 18 },
 });
 export default NewsDetail;

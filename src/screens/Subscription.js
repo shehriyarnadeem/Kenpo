@@ -10,16 +10,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const Subscription = ({ navigation }) => {
-  navigation.setOptions({ headerShown: false });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 70 }}>
-          <GobackArrow route="Home" navigation={navigation} />
-        </View>
-      </View>
       <View style={styles.content}>
-        <View style={{ paddingLeft: 20, top: 14 }}>
+        <View style={{ paddingLeft: 20 }}>
           <Image source={NinjaBoy} />
         </View>
         <View style={styles.card}>

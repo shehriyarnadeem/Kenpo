@@ -1,11 +1,21 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageBackground,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import PlayButton from '../../assets/images/playbutton.png';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import VideoSelectCard from '../components/VideoSelectCard';
 import Masterchu from '../../assets/images/masterchu.png';
+import TwoFriends from '../../assets/images/twofriends.png';
+import VideoCard from '../components/VideoCard';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -14,9 +24,19 @@ function AboutInstructor({ navigation }) {
   navigation.setOptions({ headerShown: false });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <IconAnt name="close" size={30} color="white" onPress={() => navigation.navigate('Home')} />
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+        style={{
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          height: hp('15%'),
+          right: 40,
+          bottom: 20,
+        }}
+      >
+        <IconAnt name="close" size={30} color="white" />
+      </TouchableOpacity>
+
       <ScrollView>
         <VideoSelectCard />
         <View style={{ paddingTop: 40, paddingLeft: 10 }}>
@@ -57,6 +77,14 @@ function AboutInstructor({ navigation }) {
             typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
             the 1500s, when an unknown printer took a galley of type and scrambled it to make a
           </Paragraph>
+          <View style={{ height: 30 }}></View>
+          <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={TwoFriends} resizeMode="contain" style={{ height: 200 }} />
+          </View>
+          <View style={{ height: 30 }}></View>
+          <View>
+            <VideoCard locked />
+          </View>
           <View style={{ height: 60 }}></View>
         </View>
       </ScrollView>
@@ -87,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     width: wp('90%'),
-    height: hp('20%'),
+    height: hp('10%'),
   },
   title: { fontFamily: 'RalewayMedium', color: '#7EA6FF', fontSize: 20 },
 });

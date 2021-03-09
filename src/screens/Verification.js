@@ -8,14 +8,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const Verification = ({ navigation }) => {
-  navigation.setOptions({ headerShown: false });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 70 }}>
-          <GobackArrow route="Login" navigation={navigation} />
-        </View>
-      </View>
       <View style={styles.content}>
         <View style={styles.heading}>
           <Text style={styles.verification}>Verification</Text>
