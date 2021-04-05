@@ -9,17 +9,20 @@ import {
   TextInput,
 } from 'react-native';
 
-export default function CustomButtonv2({ icon, text, onPress }) {
+export default function CustomButtonv2({ icon, text, onPressHandler, color, fontColor }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress} underlayColor="#fff">
-      <Image source={icon} style={styles.image} />
-      <Text style={styles.text}>{text}</Text>
+    <TouchableOpacity
+      style={{ ...styles.button, backgroundColor: color }}
+      onPress={onPressHandler}
+      underlayColor="#fff"
+    >
+      <Image source={icon} style={styles.image} resizeMode="contain" />
+      <Text style={{ ...styles.text, color: fontColor }}>{text}</Text>
     </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'white',
     justifyContent: 'flex-start',
     alignItems: 'center',
     width: 158,
@@ -34,7 +37,6 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
   text: {
-    color: 'black',
     textAlign: 'center',
     fontSize: 20,
   },

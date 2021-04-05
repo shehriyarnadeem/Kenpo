@@ -1,113 +1,48 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  Dimensions,
-} from 'react-native';
-import VideoCard from '../components/VideoCard';
+import React, { useEffect, useState, useContext } from 'react';
+import { StyleSheet, View, Image, FlatList, SafeAreaView, ScrollView, Text } from 'react-native';
+import CourseCard from '../components/CourseCard';
 import GoForwardCard from '../components/GoForwardCard';
-
 import VideoThumbnail from '../components/VideoThumbnail';
 import MasterChi from '../../assets/images/masterchi.png';
 import MembershipCard from '../components/MembershipCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import HttpService from '../HttpService';
+import { UserContext } from '../context';
+import Loader from '../components/Loader';
 
 function Home({ navigation }) {
   navigation.setOptions({ headerShown: false });
-  const data = [
-    {
-      key: 1,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something',
-    },
-    {
-      key: 2,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something two',
-    },
-    {
-      key: 3,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something three',
-    },
-    {
-      key: 4,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something four',
-    },
-    {
-      key: 5,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something five',
-    },
-    {
-      key: 6,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something six',
-    },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [videos, setVideos] = useState();
+  const [courses, setCourses] = useState();
+  const context = useContext(UserContext);
+  const { user, setUser } = context;
 
-  const list = [
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: false,
-      key: 1,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: false,
-      key: 2,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: false,
-      key: 3,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 4,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 5,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 6,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 7,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 8,
-    },
-    {
-      title: 'Kicks, Punches and Basic Course',
-      description: '10 hours, 19 video',
-      locked: true,
-      key: 9,
-    },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const response = await HttpService.get('/user/dashboard');
+        setVideos(response.data.videos);
+        setCourses(response.data.courses);
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const Membership = () => {
+    if (!user) {
+      return <MembershipCard navigation={navigation} />;
+    } else if (user && user.status === 'pending') {
+      return <MembershipCard navigation={navigation} />;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -132,9 +67,14 @@ function Home({ navigation }) {
           </View>
         </View>
 
-        <MembershipCard navigation={navigation} />
+        <Membership />
 
-        <GoForwardCard text="About Instructor" redirect="About" navigation={navigation} />
+        <GoForwardCard
+          text="About Instructor"
+          stack="WithoutTabs"
+          redirect="About"
+          navigation={navigation}
+        />
 
         <View
           style={{
@@ -160,36 +100,49 @@ function Home({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
+        {loading ? (
+          <Loader status={loading} />
+        ) : (
+          <FlatList
+            horizontal
+            contentContainerStyle={{ marginTop: 20 }}
+            data={videos}
+            nestedScrollEnabled
+            ItemSeparatorComponent={() => {
+              return <View style={{ width: 10 }}></View>;
+            }}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item: rowData, index }) => {
+              return (
+                <VideoThumbnail
+                  navigation={navigation}
+                  nextVideo={videos[index + 1]}
+                  details={rowData && rowData}
+                />
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        )}
 
-        <FlatList
-          horizontal
-          contentContainerStyle={{ marginTop: 20 }}
-          data={data}
-          nestedScrollEnabled
-          ItemSeparatorComponent={() => {
-            return <View style={{ width: 10 }}></View>;
-          }}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item: rowData }) => {
-            return <VideoThumbnail navigation={navigation} />;
-          }}
-          keyExtractor={(item, index) => item.key}
-        />
-
-        <View style={{ ...styles.heading }}>
+        <View style={{ ...styles.heading, left: 20, width: '90%', flexDirection: 'row' }}>
           <Text style={styles.headingText}>List of Courses</Text>
         </View>
 
-        <FlatList
-          contentContainerStyle={{ marginTop: 20 }}
-          data={list}
-          nestedScrollEnabled
-          renderItem={({ item: rowData }) => {
-            return <VideoCard {...rowData} />;
-          }}
-          keyExtractor={(item, index) => item.key}
-          ListFooterComponent={<View style={{ height: 50 }}></View>}
-        />
+        {loading ? (
+          <Loader status={loading} />
+        ) : (
+          <FlatList
+            contentContainerStyle={{ marginTop: 20 }}
+            data={courses}
+            nestedScrollEnabled
+            renderItem={({ item: rowData }) => {
+              return <CourseCard navigation={navigation} {...rowData} />;
+            }}
+            keyExtractor={(item, index) => index}
+            ListFooterComponent={<View style={{ height: 50 }}></View>}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -205,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 190,
+    minHeight: 195,
   },
   welcome: {
     fontFamily: 'RalewayExtraBold',

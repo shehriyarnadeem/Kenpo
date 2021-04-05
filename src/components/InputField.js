@@ -8,7 +8,7 @@ const InputField = ({ icon, placeholder, value, onChange, onClick }) => {
         <TextInput
           style={styles.inputField}
           placeholder={placeholder}
-          placeholderTextColor="#00000"
+          placeholderTextColor="#000"
           onChange={onChange}
           value={value}
         />
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontSize: 20,
+    fontFamily: 'NunitoSansRegular',
   },
   SectionStyle: {
     flexDirection: 'row',
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderWidth: 0.5,
-    borderColor: '#000',
+    borderColor: 'gray',
     height: 60,
     padding: 10,
     borderRadius: 5,

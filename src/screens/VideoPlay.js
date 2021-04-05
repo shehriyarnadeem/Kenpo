@@ -1,52 +1,67 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import GobackArrow from '../components/GobackArrow';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import VideoSelectCard from '../components/VideoSelectCard';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-function VideoPlay({ navigation }) {
-  navigation.setOptions({ headerShown: false });
+function VideoPlay({ navigation, ...props }) {
+  const { videoInfo, NextVideo } = props.route.params;
+
   const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
+  const [status, setStatus] = React.useState(false);
+  navigation.setOptions({
+    headerTitle: videoInfo && videoInfo.description ? video.description : 'Loremp ipsum is a dummy',
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 30 }}>
-          <GobackArrow route="News" text="Lorem Ipsum is simply... " navigation={navigation} />
-        </View>
-      </View>
-      <ScrollView>
+      <ScrollView style={{ top: 20 }}>
         <Video
           ref={video}
           style={styles.video}
           source={{
-            uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+            uri:
+              videoInfo && videoInfo.video
+                ? videoInfo.video
+                : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
           }}
           useNativeControls
           resizeMode="contain"
-          isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
         />
         <View style={{ paddingTop: 10, paddingLeft: 10 }}>
           <View>
-            <Text style={styles.title}>Video 1</Text>
+            <Text style={styles.title}>
+              {videoInfo && videoInfo.title ? videoInfo.title : 'Video 1'}
+            </Text>
           </View>
           <View>
-            <Text style={styles.date}>10.00 mins</Text>
+            <Text style={styles.date}>
+              {videoInfo && videoInfo.duration ? `${videoInfo.duration} mins` : '10 mins'}
+            </Text>
           </View>
           <Paragraph style={styles.details}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-            has been the industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a Lorem Ipsum is simply dummy
-            text of the printing and typesetting industry.
+            {videoInfo && videoInfo.description
+              ? videoInfo.description
+              : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic'}
           </Paragraph>
           <View style={{ height: 60 }}></View>
         </View>
+        {NextVideo !== undefined && (
+          <>
+            <View style={{ paddingTop: 10, paddingLeft: 10 }}>
+              <Text style={styles.title}>Next Video</Text>
+            </View>
+            <View style={{ paddingTop: 20 }}>
+              <VideoSelectCard navigation={navigation} video={NextVideo} />
+            </View>
+          </>
+        )}
+        <View style={{ height: 60 }}></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -57,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#001f65',
-    paddingTop: 30,
   },
   details: {
     paddingTop: 10,

@@ -15,7 +15,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import VideoSelectCard from '../components/VideoSelectCard';
 import Masterchu from '../../assets/images/masterchu.png';
 import TwoFriends from '../../assets/images/twofriends.png';
-import VideoCard from '../components/VideoCard';
+import CourseCard from '../components/CourseCard';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -38,7 +38,7 @@ function AboutInstructor({ navigation }) {
       </TouchableOpacity>
 
       <ScrollView>
-        <VideoSelectCard />
+        <VideoSelectCard navigation={navigation} />
         <View style={{ paddingTop: 40, paddingLeft: 10 }}>
           <View
             style={{
@@ -83,7 +83,7 @@ function AboutInstructor({ navigation }) {
           </View>
           <View style={{ height: 30 }}></View>
           <View>
-            <VideoCard locked />
+            <CourseCard locked navigation={navigation} />
           </View>
           <View style={{ height: 60 }}></View>
         </View>

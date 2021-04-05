@@ -1,64 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, ImageBackground, Image } from 'react-native';
 import GobackArrow from '../components/GobackArrow';
 import VideoSelectCard from '../components/VideoSelectCard';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
+import HttpService from '../HttpService';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Loader from '../components/Loader';
+function VideoList({ navigation, ...props }) {
+  const [loading, setLoading] = useState(false);
+  const [videos, setVideos] = useState(null);
+  const courseId = props && props.route && props.route.params ? props.route.params.courseId : null;
 
-function VideoList({ navigation }) {
-  const list = [
-    {
-      key: 1,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something',
-    },
-    {
-      key: 2,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something two',
-    },
-    {
-      key: 3,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something three',
-    },
-    {
-      key: 4,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something four',
-    },
-    {
-      key: 5,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something five',
-    },
-    {
-      key: 6,
-      imageUrl: 'http://via.placeholder.com/160x160',
-      title: 'something six',
-    },
-  ];
-  navigation.setOptions({ headerShown: false });
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        if (!courseId) {
+          const response = await HttpService.get('/user/dashboard');
+
+          setVideos(response.data.videos);
+        } else {
+          const response = await HttpService.get(`/course/${courseId}`);
+
+          setVideos(response.data.data);
+        }
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={{ ...styles.container, justifyContent: 'center' }}>
+        <Loader status={loading} />
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={{ paddingTop: 30 }}>
-          <GobackArrow route="Home" navigation={navigation} text="Video List" />
-        </View>
-      </View>
-
       <FlatList
-        contentContainerStyle={{ marginTop: 20 }}
-        data={list}
+        data={videos}
         ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-        renderItem={({ item: rowData }) => {
-          return <VideoSelectCard />;
+        renderItem={({ item: rowData, index }) => {
+          return (
+            <VideoSelectCard
+              video={rowData}
+              nextVideo={videos[index + 1]}
+              navigation={navigation}
+            />
+          );
         }}
-        keyExtractor={(item, index) => item.key}
+        keyExtractor={(item, index) => index}
         ListFooterComponent={<View style={{ height: 50 }}></View>}
       />
     </SafeAreaView>
@@ -68,7 +67,7 @@ function VideoList({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    paddingTop: 20,
     backgroundColor: '#001f65',
   },
   heading: {

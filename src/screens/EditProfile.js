@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import Loader from '../components/Loader';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Card } from 'react-native-elements';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import CustomButtonV2 from '../components/CustomButton-v2';
@@ -16,46 +17,20 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import axios from 'axios';
 import { UserContext } from '../context';
 import HttpService from '../HttpService';
-import AsyncStorage from '@react-native-community/async-storage';
-const UserDetails = ({ navigation, ...props }) => {
+const EditProfile = ({ navigation }) => {
   const context = useContext(UserContext);
   const { user, setUser } = context;
+
   const [female, setFemale] = useState(null);
-  const [term, setTerm] = useState(false);
-  const [error, setError] = useState('');
   const [validation, setValidation] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [gender, setGender] = useState(null);
-  const [male, setMale] = useState(null);
-  const [name, setName] = useState(null);
-  const [date, setDate] = useState(null);
-  const mobileNumber =
-    props && props.route && props.route.params.payload.mobile
-      ? props.route.params.payload.mobile
-      : null;
-
-  const validateFields = (payload) => {
-    const validationErrors = [];
-    if (!payload.name) {
-      validationErrors.push('Field1');
-      setValidation(validationErrors);
-    }
-    if (!payload.dob) {
-      validationErrors.push('Field2');
-      setValidation(validationErrors);
-    }
-    if (!payload.gender) {
-      validationErrors.push('Field3');
-      setValidation(validationErrors);
-    }
-    if (!payload.term) {
-      validationErrors.push('Field4');
-      setValidation(validationErrors);
-    }
-    return validationErrors;
-  };
+  const [gender, setGender] = useState(user.gender);
+  const [male, setMale] = useState();
+  const [name, setName] = useState(user.name);
+  const [date, setDate] = useState(user.dob);
 
   const onSubmit = async () => {
     setLoading(true);
@@ -64,24 +39,18 @@ const UserDetails = ({ navigation, ...props }) => {
       name,
       dob: date,
       gender: gender,
-      mobile: mobileNumber,
-      term: term,
-      status: 'pending',
+      status: user.status,
     };
-
-    const validationErrors = validateFields(payload);
-
-    if (validationErrors.length > 0) {
-      setLoading(false);
-      return;
-    }
+    const token = await AsyncStorage.getItem('jwt');
     try {
-      const response = await HttpService.post('/user/register', payload);
+      const response = await HttpService.post('/user/update', payload);
+
       setLoading(false);
-      navigation.navigate('Verification', { payload });
+      setUser(payload);
+      setLoading(false);
+      navigation.navigate('Account');
     } catch (e) {
-      console.log(e);
-      setError('Number already registered');
+      console.log(e.message);
       setLoading(false);
     }
   };
@@ -100,20 +69,9 @@ const UserDetails = ({ navigation, ...props }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.heading}>
-          <Text
-            style={{
-              color: '#FFFFFF',
-              fontFamily: 'RalewayMedium',
-              fontSize: 24,
-            }}
-          >
-            Please Enter Your Profile Detail to Continue
-          </Text>
-        </View>
-
         <InputField
           placeholder="Name"
+          value={name}
           icon={UserIcon}
           onChange={(e) => {
             setName(e.nativeEvent.text);
@@ -211,32 +169,9 @@ const UserDetails = ({ navigation, ...props }) => {
           </View>
         ) : null}
       </View>
-      <Text style={{ color: 'red', fontSize: 14, alignSelf: 'center', justifyContent: 'center' }}>
-        {error}
-      </Text>
       <Loader status={loading} />
-
       <View style={styles.continue}>
         <View style={{ bottom: 20 }}>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                paddingLeft: 20,
-              }}
-              color="#fffff"
-              onClick={() => setTerm(!term)}
-              isChecked={term}
-              checkBoxColor="white"
-              rightTextStyle={{
-                color: validation.includes('Field4') ? 'red' : 'white',
-                fontSize: 14,
-              }}
-              rightText={`By continuing, you agree to T&C`}
-            />
-          </View>
-
           <TouchableOpacity onPress={onSubmit}>
             <Card containerStyle={styles.about} borderRadius={10}>
               <View
@@ -384,4 +319,4 @@ const styles = StyleSheet.create({
     borderColor: '#03DAC6',
   },
 });
-export default UserDetails;
+export default EditProfile;

@@ -1,15 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 import { Button } from 'react-native-elements';
-import GobackArrow from '../components/GobackArrow';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import NinjaBoy from '../../assets/images/ninjaboy.png';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { UserContext } from '../context';
 const Subscription = ({ navigation }) => {
+  const context = useContext(UserContext);
+  const { user } = context;
+
+  const HandleNavigation = () => {
+    if (!user) {
+      return (
+        <TouchableOpacity>
+          <Button
+            onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
+            buttonStyle={styles.membershipCard}
+            containerStyle={{ paddingTop: 10 }}
+            icon={<Icon name="arrow-right" size={11} color="white" />}
+            iconRight
+            title="Get Membership"
+          />
+        </TouchableOpacity>
+      );
+    } else if (user && user.status === 'pending') {
+      return (
+        <TouchableOpacity>
+          <Button
+            onPress={() => navigation.navigate('PaymentForm')}
+            buttonStyle={styles.membershipCard}
+            containerStyle={{ paddingTop: 10 }}
+            icon={<Icon name="arrow-right" size={11} color="white" />}
+            iconRight
+            title="Get Membership"
+          />
+        </TouchableOpacity>
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -68,23 +101,7 @@ const Subscription = ({ navigation }) => {
                 </View>
               </View>
               <Card.Actions>
-                <TouchableOpacity>
-                  <Button
-                    buttonStyle={{
-                      width: '80%',
-                      paddingLeft: 25,
-                      alignContent: 'center',
-                      textAlign: 'left',
-                      backgroundColor: '#001F65',
-                      justifyContent: 'space-between',
-                      fontFamily: 'RalewayMedium',
-                    }}
-                    containerStyle={{ paddingTop: 10 }}
-                    icon={<Icon name="arrow-right" size={11} color="white" />}
-                    iconRight
-                    title="Get Membership"
-                  />
-                </TouchableOpacity>
+                <HandleNavigation />
               </Card.Actions>
             </Card.Content>
           </Card>
@@ -98,6 +115,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#001f65',
+  },
+  membershipCard: {
+    width: '80%',
+    paddingLeft: 25,
+    alignContent: 'center',
+    textAlign: 'left',
+    backgroundColor: '#001F65',
+    justifyContent: 'space-between',
+    fontFamily: 'RalewayMedium',
   },
   header: {
     justifyContent: 'center',

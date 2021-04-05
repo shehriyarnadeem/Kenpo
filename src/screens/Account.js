@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { Button, Card } from 'react-native-paper';
-import UserIcon from '../../assets/images/usericon.png';
+import React, { useState, useContext } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
+import { Card } from 'react-native-paper';
+import IconAnt from 'react-native-vector-icons/AntDesign';
+import UserIcon2 from '../../assets/images/usericon.png';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,12 +21,104 @@ import Bag2 from '../../assets/images/bag2.png';
 import Logout from '../../assets/images/Logout.png';
 import BagIcon from '../../assets/images/bag.png';
 import Modal from 'react-native-modal';
+import { UserContext } from '../context';
+import Loader from '../components/Loader';
+import AsyncStorage from '@react-native-community/async-storage';
+import HttpService from '../HttpService';
 
 const Account = ({ navigation }) => {
+  const context = useContext(UserContext);
+  const { user, setUser } = context;
+  const [loading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const [name, setName] = useState('');
+  const [date, setDate] = useState(null);
   const toggleModal = (check) => {
     setModalVisible(check);
+  };
+
+  const SignOut = async () => {
+    setLoading(true);
+    await AsyncStorage.removeItem('jwt');
+    setUser(null);
+    setLoading(false);
+    navigation.navigate('Home');
+  };
+
+  const cancelMembership = () => {
+    setLoading(true);
+    setUser((state) => ({ ...state, status: 'pending' }));
+    setLoading(false);
+    toggleModal(false);
+  };
+
+  const Loading = () => {
+    if (loading) {
+      return <Loader status={loading} />;
+    }
+    return null;
+  };
+
+  const MembershipButton = () => {
+    if (user && user.status == 'pending') {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home', { screen: 'Subscription' });
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: 'RalewayMedium',
+              color: '#001F65',
+              fontSize: 15,
+            }}
+          >
+            Get Membership
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          toggleModal(true);
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: 'RalewayMedium',
+            color: '#001F65',
+            fontSize: 15,
+          }}
+        >
+          Cancel Membership
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const LoginButton = () => {
+    return (
+      <>
+        <TouchableOpacity onPress={() => navigation.navigate('Auth', { screen: 'Login' })}>
+          <Button
+            onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
+            buttonStyle={{
+              width: '73%',
+              padding: 6,
+              textAlign: 'left',
+              backgroundColor: '#001F65',
+              justifyContent: 'space-around',
+            }}
+            containerStyle={{ paddingTop: 10, width: '100%' }}
+            icon={<IconAnt name="arrow-right" size={20} color="white" />}
+            iconRight
+            title="Sign In With phone number"
+          />
+        </TouchableOpacity>
+      </>
+    );
   };
   const PersonalDetails = () => {
     return (
@@ -39,15 +140,19 @@ const Account = ({ navigation }) => {
           >
             Personal Detail
           </Text>
-          <Text
-            style={{
-              fontFamily: 'RalewayMedium',
-              color: '#001F65',
-              fontSize: 15,
-            }}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('WithoutTabs', { screen: 'EditProfile' })}
           >
-            Edit Profile
-          </Text>
+            <Text
+              style={{
+                fontFamily: 'RalewayMedium',
+                color: '#001F65',
+                fontSize: 15,
+              }}
+            >
+              Edit Profile
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
@@ -56,7 +161,7 @@ const Account = ({ navigation }) => {
               ...styles.RowPersonalDetails,
             }}
           >
-            <Image source={UserIcon} />
+            <Image source={UserIcon2} style={{ resizeMode: 'contain' }} />
             <Text
               style={{
                 fontFamily: 'RalewayMedium',
@@ -66,7 +171,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              John Doe
+              {user && user.name ? user.name : 'Not Available'}
             </Text>
           </View>
           <View
@@ -83,7 +188,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              20-02-2000
+              {user && user.dob ? user.dob : 'N/a'}
             </Text>
           </View>
           <View
@@ -100,7 +205,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              Male
+              {user && user.gender ? user.gender : 'N/a'}
             </Text>
           </View>
         </View>
@@ -128,17 +233,7 @@ const Account = ({ navigation }) => {
           >
             Membership Detail
           </Text>
-          <TouchableOpacity onPress={() => toggleModal(true)}>
-            <Text
-              style={{
-                fontFamily: 'RalewayMedium',
-                color: '#001F65',
-                fontSize: 15,
-              }}
-            >
-              Cancel Membership
-            </Text>
-          </TouchableOpacity>
+          <MembershipButton />
         </View>
 
         <View style={{ display: 'flex', flexDirection: 'column' }}>
@@ -155,7 +250,7 @@ const Account = ({ navigation }) => {
                 fontSize: 16,
               }}
             >
-              Start Date:
+              Start Date:{' '}
             </Text>
             <Text
               style={{
@@ -164,7 +259,7 @@ const Account = ({ navigation }) => {
                 fontSize: 16,
               }}
             >
-              20-02-2020
+              Not Available
             </Text>
           </View>
           <View
@@ -179,7 +274,7 @@ const Account = ({ navigation }) => {
                 fontSize: 16,
               }}
             >
-              End Date
+              End Date:{' '}
             </Text>
             <Text
               style={{
@@ -188,7 +283,7 @@ const Account = ({ navigation }) => {
                 fontSize: 16,
               }}
             >
-              19-03-2020
+              Not Available
             </Text>
           </View>
           <PaymentDetails />
@@ -251,7 +346,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              John Doe
+              Not Available
             </Text>
           </View>
           <View
@@ -259,7 +354,7 @@ const Account = ({ navigation }) => {
               ...styles.RowPersonalDetails,
             }}
           >
-            <Image source={UserIcon} />
+            <Image source={UserIcon2} />
             <Text
               style={{
                 fontFamily: 'RalewayMedium',
@@ -268,7 +363,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 14,
               }}
             >
-              XXXX XXX XXXX 4651
+              Not Available
             </Text>
           </View>
           <View
@@ -285,7 +380,7 @@ const Account = ({ navigation }) => {
                 paddingLeft: 13,
               }}
             >
-              02-2024
+              Not Available
             </Text>
           </View>
         </View>
@@ -293,6 +388,26 @@ const Account = ({ navigation }) => {
     );
   };
 
+  const ShowMembershipDetails = () => {
+    if (!user || user.status !== 'pending') {
+      return (
+        <Card
+          style={{
+            width: wp('95%'),
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            top: 20,
+          }}
+        >
+          <Card.Content>
+            <MembershipDetails />
+          </Card.Content>
+        </Card>
+      );
+    }
+    return null;
+  };
   function MembershipModal({ visible }) {
     return (
       <Modal isVisible={visible}>
@@ -323,8 +438,9 @@ const Account = ({ navigation }) => {
               width: '100%',
             }}
           >
+            <Loading />
             <TouchableOpacity
-              onPress={() => toggleModal(false)}
+              onPress={() => cancelMembership()}
               style={{
                 backgroundColor: '#001F65',
                 justifyContent: 'center',
@@ -371,71 +487,84 @@ const Account = ({ navigation }) => {
     );
   }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: wp('90%'),
-          flexDirection: 'row',
-          height: hp('20%'),
-          alignItems: 'center',
-        }}
-      >
-        <Text
+  if (!user) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View
           style={{
-            color: 'white',
-            fontSize: 20,
-            paddingLeft: 40,
-            fontFamily: 'RalewayBold',
-          }}
-        >
-          My Account
-        </Text>
-        <Image source={Logout} style={{ resizeMode: 'contain', height: 30 }} />
-      </View>
-      <View
-        style={{
-          alignItems: 'center',
-          flex: 1,
-          bottom: 30,
-        }}
-      >
-        <Card
-          style={{
-            width: wp('95%'),
-            borderRadius: 20,
+            display: 'flex',
             justifyContent: 'center',
-            alignSelf: 'center',
+            alignContent: 'center',
           }}
         >
-          <Card.Content>
-            <PersonalDetails />
-          </Card.Content>
-        </Card>
-        <Card
+          <LoginButton />
+        </View>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View
           style={{
-            width: wp('95%'),
-            borderRadius: 20,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            top: 20,
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: wp('90%'),
+            flexDirection: 'row',
+            height: hp('20%'),
+            alignItems: 'center',
           }}
         >
-          <Card.Content>
-            <MembershipDetails />
-          </Card.Content>
-        </Card>
-      </View>
-      <MembershipModal visible={isModalVisible} />
-    </SafeAreaView>
-  );
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 20,
+              paddingLeft: 40,
+              fontFamily: 'RalewayBold',
+            }}
+          >
+            My Account
+          </Text>
+
+          <TouchableOpacity onPress={() => SignOut()}>
+            {loading ? (
+              <Loader />
+            ) : (
+              <Image source={Logout} style={{ resizeMode: 'contain', height: 30 }} />
+            )}
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            flex: 1,
+            bottom: 30,
+          }}
+        >
+          <Card
+            style={{
+              width: wp('95%'),
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+          >
+            <Card.Content>
+              <PersonalDetails />
+            </Card.Content>
+          </Card>
+
+          <ShowMembershipDetails />
+        </View>
+        <MembershipModal visible={isModalVisible} />
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
     backgroundColor: '#001f65',
   },
   RowPersonalDetails: {
@@ -447,6 +576,10 @@ const styles = StyleSheet.create({
     paddingTop: 18,
 
     alignItems: 'center',
+  },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 20,
   },
 });
 export default Account;
