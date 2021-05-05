@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@google-pay/button-react": "^2.3.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/clipboard": "^1.2.3",
@@ -33,6 +34,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^2.0.2",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-iap": "^6.0.3",
     "react-native-masked-loader": "^1.1.4",
     "react-native-masked-text": "^1.13.0",
     "react-native-masked-view": "^0.2.0",

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import GobackArrow from '../components/GobackArrow';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video, Audio } from 'expo-av';
 import { ScrollView } from 'react-native-gesture-handler';
 import VideoSelectCard from '../components/VideoSelectCard';
 import {
@@ -12,11 +12,24 @@ import {
 function VideoPlay({ navigation, ...props }) {
   const { videoInfo, NextVideo } = props.route.params;
 
-  const video = React.useRef(null);
+  const video = React.createRef();
   const [status, setStatus] = React.useState(false);
+  const [play, setPlay] = React.useState(true);
   navigation.setOptions({
     headerTitle: videoInfo && videoInfo.description ? video.description : 'Loremp ipsum is a dummy',
   });
+
+  //Blur Event: to be fired when the HomeScreen loses focus.
+  React.useEffect( () => {
+    const unsubscribe = navigation.addListener('blur', async () => {
+      //Every time the screen loses focus the Video is paused
+      if(video){
+        Promise.all(await video.current.pauseAsync());
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,8 +43,9 @@ function VideoPlay({ navigation, ...props }) {
                 ? videoInfo.video
                 : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
           }}
-          useNativeControls
-          resizeMode="contain"
+        useNativeControls
+        shouldPlay={play}
+        resizeMode="contain"
         />
         <View style={{ paddingTop: 10, paddingLeft: 10 }}>
           <View>

@@ -15,6 +15,7 @@ import NewsDetail from './screens/NewsDetail';
 import Account from './screens/Account';
 import AboutInstructor from './screens/AboutInstructor';
 import VideoPlay from './screens/VideoPlay';
+import Test from './screens/Test';
 import VideoList from './screens/VideoList';
 import Verification from './screens/Verification';
 import UserDetails from './screens/UserDetails';
@@ -294,6 +295,23 @@ function TabsScreen() {
       <Tabs.Screen
         name="Account"
         component={Account}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.tabStyles}>
+              <Image
+                source={focused ? AccountIconBlue : AccountIcon}
+                style={{ height: 25, width: 30, top: 12 }}
+              />
+              <Text style={{ top: 7, fontSize: 15, fontFamily: 'RalewayMedium' }}>Account</Text>
+            </View>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Test"
+        component={Test}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color, size, focused }) => (

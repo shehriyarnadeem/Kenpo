@@ -9,37 +9,34 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { UserContext } from '../context';
+
 const Subscription = ({ navigation }) => {
   const context = useContext(UserContext);
   const { user } = context;
 
   const HandleNavigation = () => {
     if (!user) {
-      return (
-        <TouchableOpacity>
-          <Button
-            onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
-            buttonStyle={styles.membershipCard}
-            containerStyle={{ paddingTop: 10 }}
-            icon={<Icon name="arrow-right" size={11} color="white" />}
-            iconRight
-            title="Get Membership"
-          />
-        </TouchableOpacity>
-      );
+      <TouchableOpacity>
+        <Button
+          onPress={() => navigation.navigate('Auth', { screen: 'Login' })}
+          buttonStyle={styles.membershipCard}
+          containerStyle={{ paddingTop: 10 }}
+          icon={<Icon name="arrow-right" size={11} color="white" />}
+          iconRight
+          title="Get Membership"
+        />
+      </TouchableOpacity>;
     } else if (user && user.status === 'pending') {
-      return (
-        <TouchableOpacity>
-          <Button
-            onPress={() => navigation.navigate('PaymentForm')}
-            buttonStyle={styles.membershipCard}
-            containerStyle={{ paddingTop: 10 }}
-            icon={<Icon name="arrow-right" size={11} color="white" />}
-            iconRight
-            title="Get Membership"
-          />
-        </TouchableOpacity>
-      );
+      <TouchableOpacity>
+        <Button
+          onPress={() => navigation.navigate('PaymentForm')}
+          buttonStyle={styles.membershipCard}
+          containerStyle={{ paddingTop: 10 }}
+          icon={<Icon name="arrow-right" size={11} color="white" />}
+          iconRight
+          title="Get Membership"
+        />
+      </TouchableOpacity>;
     }
   };
 
