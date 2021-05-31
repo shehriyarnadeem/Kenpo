@@ -34,6 +34,8 @@ const Subscription = ({ navigation }) => {
   const [purchased, setPurchased] = useState(false); //set to true if the user has active subscription
   const [receipt, setReceipt] = useState();
   const [products, setProducts] = useState(null); //used to store list of products
+  const context = useContext(UserContext);
+  const { user, setUser } = context;
 
   useEffect(() => {
     IAP.initConnection()
@@ -64,16 +66,13 @@ const Subscription = ({ navigation }) => {
 
     purchaseErrorSubscription = IAP.purchaseErrorListener((error) => {
       if (!(error['responseCode'] === '2')) {
-        Alert.alert(
+        console.log(
           'Error',
           'There has been an error with your purchase, error code' + error['code']
         );
-
-        console.log(error, '12');
       }
     });
     purchaseUpdateSubscription = IAP.purchaseUpdatedListener((purchase) => {
-      console.log(purchase, 'new purchase');
       const receipt = purchase.transactionReceipt;
       if (receipt) {
         setPurchased(true);
@@ -95,9 +94,6 @@ const Subscription = ({ navigation }) => {
       } catch (error) {}
     };
   }, []);
-
-  const context = useContext(UserContext);
-  const { user, setUser } = context;
 
   const updateUser = async () => {
     const payload = {
@@ -131,6 +127,7 @@ const Subscription = ({ navigation }) => {
         </TouchableOpacity>
       );
     } else if (user && user.status === 'pending') {
+      console.log(user);
       if (products) {
         return (
           products &&
@@ -152,8 +149,18 @@ const Subscription = ({ navigation }) => {
           })
         );
       } else {
-        return null;
+        return (
+          <View>
+            <Text>Loading Subscription</Text>
+          </View>
+        );
       }
+    } else {
+      return (
+        <View>
+          <Text>Subscription activated</Text>
+        </View>
+      );
     }
   };
 
@@ -248,12 +255,14 @@ const styles = StyleSheet.create({
   content: {
     display: 'flex',
     flex: 1,
+    marginTop: 20,
     flexDirection: 'column',
     justifyContent: 'center',
   },
   card: {
     width: '95%',
-    top: 30,
+
+    height: hp('50%'),
     justifyContent: 'center',
     alignSelf: 'center',
   },

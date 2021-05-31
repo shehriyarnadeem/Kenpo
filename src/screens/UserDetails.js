@@ -320,9 +320,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputField: {
-    flex: 1,
-    paddingLeft: 10,
+    paddingLeft: 100,
     fontSize: 20,
+    marginTop: 20,
   },
   SectionStyle: {
     flexDirection: 'row',
