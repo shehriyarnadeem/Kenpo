@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import { Paragraph } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';

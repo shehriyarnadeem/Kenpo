@@ -20,7 +20,7 @@ import {
 } from 'react-native-responsive-screen';
 import { UserContext } from '../context';
 import IAP from 'react-native-iap';
-
+import Utils from '../utils';
 // Platform select will allow you to use a different array of product ids based on the platform
 const items = Platform.select({
   ios: [],
@@ -32,7 +32,7 @@ let purchaseErrorSubscription;
 
 const Subscription = ({ navigation }) => {
   const [purchased, setPurchased] = useState(false); //set to true if the user has active subscription
-  const [receipt, setReceipt] = useState();
+  const [receipt, setReceipt] = useState({});
   const [products, setProducts] = useState(null); //used to store list of products
   const context = useContext(UserContext);
   const { user, setUser } = context;
@@ -55,10 +55,9 @@ const Subscription = ({ navigation }) => {
           .catch(() => {})
           .then((res) => {
             try {
-              const receipt = res[res.length - 1].transactionReceipt;
+              const receipt = res[res.length - 1];
               if (receipt) {
-                console.log(receipt, 'receipt');
-                setReceipt(receipt);
+                console.log('Reciept');
               }
             } catch (error) {}
           });
@@ -73,10 +72,10 @@ const Subscription = ({ navigation }) => {
       }
     });
     purchaseUpdateSubscription = IAP.purchaseUpdatedListener((purchase) => {
-      const receipt = purchase.transactionReceipt;
-      if (receipt) {
+      if (purchase) {
         setPurchased(true);
-        setReceipt(receipt);
+
+        setReceipt(purchase);
         updateUser();
         IAP.finishTransaction(purchase, false);
       }
@@ -99,10 +98,13 @@ const Subscription = ({ navigation }) => {
     const payload = {
       ...user,
       status: 'paid',
+      subscription_expiry_date: Utils.getEndDate(),
+      device: 'android',
+      subscription_id: receipt.transactionId,
     };
     try {
       await apiClient({
-        url: '/user/update',
+        url: '/user/subscription',
         method: 'POST',
         data: { ...payload },
       });
@@ -127,7 +129,6 @@ const Subscription = ({ navigation }) => {
         </TouchableOpacity>
       );
     } else if (user && user.status === 'pending') {
-      console.log(user);
       if (products) {
         return (
           products &&
@@ -141,7 +142,6 @@ const Subscription = ({ navigation }) => {
                 key={p['productId']}
                 title="Get Membership"
                 onPress={() => {
-                  console.log(p['productId']);
                   IAP.requestSubscription(p['productId']);
                 }}
               />

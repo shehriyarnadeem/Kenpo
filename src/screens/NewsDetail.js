@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-
-import { View, Text, Image, StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
+import { Card, Paragraph } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   widthPercentageToDP as wp,

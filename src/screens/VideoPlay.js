@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Loader from '../components/Loader';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import { Card, Paragraph } from 'react-native-paper';
 // import { Video } from 'expo-av';
 import Video from 'react-native-video';

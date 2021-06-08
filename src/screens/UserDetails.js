@@ -181,7 +181,7 @@ const UserDetails = ({ navigation, ...props }) => {
         </View>
         {validation.includes('Field2') ? (
           <View style={{ justifyContent: 'center', marginLeft: 12, top: 2 }}>
-            <Text style={{ color: 'red', fontSize: 15 }}>- Missing Name field</Text>
+            <Text style={{ color: 'red', fontSize: 15 }}>- Missing Date of Birth</Text>
           </View>
         ) : null}
         <View

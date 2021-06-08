@@ -18,7 +18,13 @@ const UserContextProvider = ({ children }) => {
         });
 
         if (response.status === 200) {
-          setUser(response.data.data);
+          const user = response.data.data;
+          if (user.subscription_expiry_date !== null) {
+            if (user.subscription_expiry_date === new Date().toLocaleDateString()) {
+              setUser({ ...user, status: 'pending' });
+            }
+          }
+          setUser(user);
         }
       } catch (e) {
         console.log(e);

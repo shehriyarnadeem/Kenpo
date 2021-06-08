@@ -1,29 +1,47 @@
-import React, { useState, useContext } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Linking } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import { Card } from 'react-native-paper';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import UserIcon2 from '../../assets/images/usericon.png';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
 import MarsIcon from '../../assets/images/mars.png';
 import Logout from '../../assets/images/Logout.png';
 import BagIcon from '../../assets/images/bag.png';
-import Modal from 'react-native-modal';
 import { UserContext } from '../context';
 import Loader from '../components/Loader';
-import AsyncStorage from '@react-native-community/async-storage';
 
+import IAP from 'react-native-iap';
 const Account = ({ navigation }) => {
+  useEffect(() => {
+    async function getProduct() {
+      try {
+        const result = await IAP.initConnection();
+
+        const products = await IAP.getPurchaseHistory();
+        const receipt = products[0].transactionReceipt;
+        const token = await AsyncStorage.getItem('jwt');
+        const validate = await IAP.validateReceiptAndroid(
+          'com.kenpo.rnap',
+          'kenpo_100_1m',
+          receipt.purchaseToken,
+          token,
+          true
+        );
+        console.log(validate, '324');
+        // this.setState({ products });
+      } catch (err) {
+        console.warn(err); // standardized err.code and err.message available
+      }
+    }
+    getProduct();
+  });
+
   const context = useContext(UserContext);
   const { user, setUser } = context;
   const [loading, setLoading] = useState(false);
@@ -41,10 +59,11 @@ const Account = ({ navigation }) => {
     navigation.navigate('Home');
   };
 
-  const cancelMembership = () => {
-    setLoading(true);
-    setUser((state) => ({ ...state, status: 'pending' }));
-    setLoading(false);
+  const cancelMembership = async () => {
+    await Linking.openURL(
+      'https://play.google.com/store/account/subscriptions?package=com.kenpo.rnapp&sku=kenpo_100_1m'
+    );
+
     toggleModal(false);
   };
 
@@ -209,183 +228,6 @@ const Account = ({ navigation }) => {
     );
   };
 
-  const MembershipDetails = () => {
-    return (
-      <>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-
-            alignItems: 'center',
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: 'RalewayBold',
-              fontSize: 16,
-            }}
-          >
-            Membership Detail
-          </Text>
-          <MembershipButton />
-        </View>
-
-        <View style={{ display: 'flex', flexDirection: 'column' }}>
-          <View
-            style={{
-              ...styles.RowPersonalDetails,
-              width: '55%',
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: 'RalewayMedium',
-                color: '#000000',
-                fontSize: 16,
-              }}
-            >
-              Start Date:{' '}
-            </Text>
-            <Text
-              style={{
-                fontFamily: 'RalewayMedium',
-                color: '#000000',
-                fontSize: 16,
-              }}
-            >
-              Not Available
-            </Text>
-          </View>
-          <View
-            style={{
-              ...styles.RowPersonalDetails,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: 'RalewayMedium',
-                color: '#000000',
-                fontSize: 16,
-              }}
-            >
-              End Date:{' '}
-            </Text>
-            <Text
-              style={{
-                fontFamily: 'RalewayMedium',
-                color: '#000000',
-                fontSize: 16,
-              }}
-            >
-              Not Available
-            </Text>
-          </View>
-        </View>
-      </>
-    );
-  };
-
-  const ShowMembershipDetails = () => {
-    if (!user || user.status !== 'pending') {
-      return (
-        <Card
-          style={{
-            width: wp('95%'),
-            borderRadius: 20,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            top: 20,
-          }}
-        >
-          <Card.Content>
-            <MembershipDetails />
-          </Card.Content>
-        </Card>
-      );
-    }
-    return null;
-  };
-  function MembershipModal({ visible }) {
-    return (
-      <Modal isVisible={visible}>
-        <View
-          style={{
-            backgroundColor: 'white',
-            height: '30%',
-            borderRadius: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: 'RalewayBold',
-              textAlign: 'center',
-              fontSize: 19,
-            }}
-          >
-            Are you sure you want to cancel your membership ?
-          </Text>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              top: 40,
-              width: '100%',
-            }}
-          >
-            <Loading />
-            <TouchableOpacity
-              onPress={() => cancelMembership()}
-              style={{
-                backgroundColor: '#001F65',
-                justifyContent: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                width: 150,
-                height: 40,
-                borderRadius: 5,
-              }}
-            >
-              <Text
-                style={{
-                  color: '#ffffff',
-                  fontSize: 20,
-                }}
-              >
-                Yes
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => toggleModal(false)}
-              style={{
-                backgroundColor: '#001F65',
-                justifyContent: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                width: 150,
-                height: 40,
-                borderRadius: 5,
-              }}
-            >
-              <Text
-                style={{
-                  color: '#ffffff',
-                  fontSize: 20,
-                }}
-              >
-                Cancel
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
   if (!user) {
     return (
       <SafeAreaView style={styles.container}>
@@ -451,10 +293,7 @@ const Account = ({ navigation }) => {
               <PersonalDetails />
             </Card.Content>
           </Card>
-
-          <ShowMembershipDetails />
         </View>
-        <MembershipModal visible={isModalVisible} />
       </SafeAreaView>
     );
   }

@@ -1,13 +1,5 @@
-import React, { useState, useContext } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import React from 'react';
+import { Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 export default function CustomButtonv2({ icon, text, onPressHandler, color, fontColor }) {
   return (

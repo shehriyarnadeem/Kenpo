@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import { TextInputMask } from 'react-native-masked-text';
 import Loader from '../components/Loader';
 import { Card } from 'react-native-elements';
 import IconAnt from 'react-native-vector-icons/AntDesign';
-import CustomButtonV2 from '../components/CustomButton-v2';
 import InputField from '../components/InputField';
-import CheckBox from 'react-native-check-box';
 import UserIcon from '../../assets/images/usericon.png';
 import Paymenticon from '../../assets/images/paymentname.png';
 import DateIcon from '../../assets/images/bag.png';

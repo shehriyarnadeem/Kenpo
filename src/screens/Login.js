@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import GoForwardCard from '../components/GoForwardCard';
 import { apiClient } from '../apiClient';
 import Loader from '../components/Loader';
-
+import SafeAreaView from 'react-native-safe-area-view';
 const Login = ({ navigation }) => {
   const [value, setValue] = useState('');
   const [error, setError] = useState(null);

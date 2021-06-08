@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import Loader from '../components/Loader';
 import { apiClient } from '../apiClient';
 import Modal from 'react-native-modal';
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   continue: {
-    height: hp('10%'),
+    height: hp('20%'),
 
     justifyContent: 'flex-end',
   },

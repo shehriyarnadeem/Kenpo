@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, Image, FlatList, SafeAreaView, ScrollView, Text } from 'react-native';
+import { StyleSheet, View, Image, FlatList, ScrollView, Text } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
 import CourseCard from '../components/CourseCard';
 import GoForwardCard from '../components/GoForwardCard';
 import VideoThumbnail from '../components/VideoThumbnail';
