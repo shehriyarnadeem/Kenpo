@@ -15,7 +15,7 @@ import NewsDetail from './screens/NewsDetail';
 import Account from './screens/Account';
 import AboutInstructor from './screens/AboutInstructor';
 import VideoPlay from './screens/VideoPlay';
-import Test from './screens/Test';
+
 import VideoList from './screens/VideoList';
 import Verification from './screens/Verification';
 import UserDetails from './screens/UserDetails';
@@ -338,15 +338,6 @@ export function RootStackScreens({ navigation }) {
         name="WithoutTabs"
         navigation={navigation}
         component={ScreenWithoutTabsScreens}
-        options={{
-          animationEnabled: false,
-        }}
-      />
-
-      <RootStack.Screen
-        name="Test"
-        navigation={navigation}
-        component={TabsScreen}
         options={{
           animationEnabled: false,
         }}

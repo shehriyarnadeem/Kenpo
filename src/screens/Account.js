@@ -228,6 +228,62 @@ const Account = ({ navigation }) => {
     );
   };
 
+  const MembershipDetails = () => {
+    return (
+      <>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: 'RalewayBold',
+              fontSize: 16,
+            }}
+          >
+            Membership Details
+          </Text>
+        </View>
+
+        <View style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
+          <View
+            style={{
+              ...styles.RowPersonalDetails,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: 'RalewayMedium',
+                color: '#000000',
+                fontSize: 16,
+                position: 'relative',
+                paddingLeft: 10,
+              }}
+            >
+              Expiry date :
+            </Text>
+            <Text
+              style={{
+                fontFamily: 'RalewayMedium',
+                color: '#000000',
+                fontSize: 16,
+                position: 'relative',
+                paddingLeft: 10,
+              }}
+            >
+              {user && user.subscription_expiry_date}
+            </Text>
+          </View>
+        </View>
+      </>
+    );
+  };
+
   if (!user) {
     return (
       <SafeAreaView style={styles.container}>
@@ -294,6 +350,29 @@ const Account = ({ navigation }) => {
             </Card.Content>
           </Card>
         </View>
+
+        {user && user.status === 'paid' && (
+          <View
+            style={{
+              alignItems: 'center',
+              flex: 1,
+              bottom: 30,
+            }}
+          >
+            <Card
+              style={{
+                width: wp('95%'),
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            >
+              <Card.Content>
+                <MembershipDetails />
+              </Card.Content>
+            </Card>
+          </View>
+        )}
       </SafeAreaView>
     );
   }

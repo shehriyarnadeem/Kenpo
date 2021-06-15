@@ -32,7 +32,6 @@ let purchaseErrorSubscription;
 
 const Subscription = ({ navigation }) => {
   const [purchased, setPurchased] = useState(false); //set to true if the user has active subscription
-  const [receipt, setReceipt] = useState({});
   const [products, setProducts] = useState(null); //used to store list of products
   const context = useContext(UserContext);
   const { user, setUser } = context;
@@ -74,9 +73,7 @@ const Subscription = ({ navigation }) => {
     purchaseUpdateSubscription = IAP.purchaseUpdatedListener((purchase) => {
       if (purchase) {
         setPurchased(true);
-
-        setReceipt(purchase);
-        updateUser();
+        updateUser(purchase);
         IAP.finishTransaction(purchase, false);
       }
     });
@@ -94,14 +91,15 @@ const Subscription = ({ navigation }) => {
     };
   }, []);
 
-  const updateUser = async () => {
+  const updateUser = async (purchaseReceipt) => {
     const payload = {
       ...user,
       status: 'paid',
       subscription_expiry_date: Utils.getEndDate(),
       device: 'android',
-      subscription_id: receipt.transactionId,
+      subscription_id: purchaseReceipt.transactionId,
     };
+
     try {
       await apiClient({
         url: '/user/subscription',

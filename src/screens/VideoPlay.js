@@ -24,7 +24,7 @@ function VideoPlay({ navigation, ...props }) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ top: 20 }}>
         <Video
-          resizeMode="contain"
+          resizeMode="cover"
           source={{
             uri:
               videoInfo && videoInfo.video
@@ -32,7 +32,9 @@ function VideoPlay({ navigation, ...props }) {
                 : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
           }} // Can be a URL or a local file.
           playInBackground={false}
-          playWhenInactive={false}
+          fullscreen={true}
+          fullscreenAutorotate={true}
+          fullscreenOrientation={'all'}
           controls
           style={styles.video}
         />

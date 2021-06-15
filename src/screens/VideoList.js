@@ -26,7 +26,7 @@ function VideoList({ navigation, ...props }) {
           setVideos(response.data.videos);
         } else {
           const response = await apiClient({
-            url: '/course',
+            url: `/course/${courseId}`,
             method: 'GET',
           });
 

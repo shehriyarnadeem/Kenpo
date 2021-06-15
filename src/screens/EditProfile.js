@@ -219,8 +219,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   continue: {
-    height: hp('20%'),
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   heading: {
     width: '90%',

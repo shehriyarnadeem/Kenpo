@@ -21,6 +21,10 @@ export default function VideoThumbnail({ navigation, details, nextVideo }) {
   } else if (user && user.status === 'paid') {
     disable = false;
   }
+
+  function truncate(str, n) {
+    return str.length > n ? str.substr(0, n - 1) + '...' : str;
+  }
   return (
     <Card
       style={{ backgroundColor: '#001f65', marginLeft: 15 }}
@@ -78,7 +82,7 @@ export default function VideoThumbnail({ navigation, details, nextVideo }) {
               padding: 8,
             }}
           >
-            {details.title}
+            {truncate(details.title, 14)}
           </Text>
         </View>
       </ImageBackground>
